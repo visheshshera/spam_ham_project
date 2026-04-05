@@ -26,9 +26,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from imblearn.over_sampling import SMOTE
 
-
-
-
 class DataTransformation:
     def __init__(self):
         pass
