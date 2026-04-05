@@ -23,7 +23,7 @@ class ModelTrainer:
             y_pred=model.predict(x_test_arr)
 
             accuracy=accuracy_score(y_test_arr,y_pred)
-            logging.info(f"Model Trained with accuracy{accuracy}")
+            logging.info(f"Model Trained with accuracy : {accuracy}")
             return accuracy
         except Exception as e:
             raise CustomException(e,sys)
