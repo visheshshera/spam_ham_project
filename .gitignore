@@ -218,4 +218,6 @@ wheels/
 # Virtual environments
 .venv
 .env
+
+artifacts/
 >>>>>>> 6f35c8b (first)

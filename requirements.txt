@@ -9,3 +9,4 @@ dotenv
 fsspec
 huggingface_hub
 dill
+streamlit

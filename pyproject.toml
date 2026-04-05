@@ -16,4 +16,5 @@ dependencies = [
     "pandas>=3.0.1",
     "pymongo>=4.16.0",
     "scikit-learn>=1.8.0",
+    "streamlit>=1.56.0",
 ]
