@@ -219,5 +219,5 @@ wheels/
 .venv
 .env
 
-artifacts/
+artifacts/*
 >>>>>>> 6f35c8b (first)
