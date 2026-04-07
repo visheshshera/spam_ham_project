@@ -1,12 +1,11 @@
 import os,sys
 import streamlit as st
 import joblib
-from src.pipeline.training_pipeline import TrainingPipeline
-from src.pipeline.prediction_pipeline import PredictionPipeline
 
 st.title("Spam Classifier")
 
 if st.button("Train Model"):
+    from src.pipeline.training_pipeline import TrainingPipeline
     obj=TrainingPipeline()
     obj.initiate_training_pipeline()
     st.success("Model Trained Successfully")
@@ -14,6 +13,7 @@ if st.button("Train Model"):
 input_text=st.text_input("Enter the text")
 
 if st.button("Predict"):
+    from src.pipeline.prediction_pipeline import PredictionPipeline
 
     obj=PredictionPipeline()
     prediction=obj.initiate_prediction_pipeline(input_text)
