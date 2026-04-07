@@ -9,6 +9,7 @@ from src.constants import *
 import numpy as np
 import pandas as pd
 
+from typing import Optional
 
 class DataPuller:
     def __init__(self) -> None:
@@ -20,7 +21,7 @@ class DataPuller:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def import_collection_as_dataframe(self, collection_name: str,database_name: str)-> pd.DataFrame:
+    def import_collection_as_dataframe(self, collection_name: str,database_name: Optional[str] = None)-> pd.DataFrame:
         """
         Imports a collection from a MongoDB database as a pandas DataFrame.
 
@@ -43,24 +44,45 @@ class DataPuller:
 
         """
         try:
-            logging.info(f"Importing {collection_name} collection from {database_name} database")
-            
-            # Connect to MongoDB and retrieve the collection
-            collection = self.mongo_client.database[collection_name]
-            
-            df = pd.DataFrame(list(collection.find()))
-            if '_id' in df.columns:
-                df.drop('_id',axis=1,inplace=True)
+            database_name = database_name if database_name else DATABASE_NAME
 
-            df.replace({"na":np.nan},inplace=True)
+            logging.info(
+                f"Importing collection '{collection_name}' from database '{database_name}'"
+            )
+
+            # Check database exists
+            if database_name not in self.mongo_client.client.list_database_names():
+                raise Exception(f"Database '{database_name}' does not exist")
+
+            db = self.mongo_client.client[database_name]
+
+            # Check collection exists
+            if collection_name not in db.list_collection_names():
+                raise Exception(
+                    f"Collection '{collection_name}' not found in database '{database_name}'"
+                )
+
+            collection = db[collection_name]
+
+            logging.info("Fetching data from MongoDB collection")
+
+            df = pd.DataFrame(list(collection.find()))
+
+            if df.empty:
+                logging.warning("Collection exists but contains no documents")
+
+            # Remove MongoDB internal id
+            if "_id" in df.columns:
+                df.drop("_id", axis=1, inplace=True)
+
+            # Replace 'na' values
+            df.replace({"na": np.nan}, inplace=True)
+
+            logging.info(
+                f"Data successfully imported. Shape of dataframe: {df.shape}"
+            )
+
             return df
-        
 
         except Exception as e:
             raise CustomException(e, sys)
-        
-
-if __name__=='__main__':
-    obj=DataPuller()
-    a=obj.import_collection_as_dataframe('spam-ham','ml_database')
-    print(a)

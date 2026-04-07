@@ -29,7 +29,7 @@ def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
 
     text = text.lower()
-    text = re.sub(r"[^a-zA-Z0-9\s]", "", text)
+    text = re.sub(r"^[^A-Za-z0-9₹$€£¥]+|[^A-Za-z0-9\s₹$€£¥]+|[\s]+$", "", text).strip()  #only keeping digits,alphabet,currency symbol
 
     tokens = word_tokenize(text)
 
@@ -45,7 +45,7 @@ def preprocess_text(text):
     return " ".join(tokens)
 
 
-if __name__=="__main__":
-    text = "Hello, how are you?"
-    preprocessed_text = preprocess_text(text)
-    print(preprocessed_text)
+# if __name__=="__main__":
+#     text = "Hello, how are you?"
+#     preprocessed_text = preprocess_text(text)
+#     print(preprocessed_text)

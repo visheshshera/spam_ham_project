@@ -6,22 +6,29 @@ from src.components.data_ingestion import DataIngestion
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
 
+from src.entity.config_entity import DataIngestionConfig,DataTransformationConfig,ModelTrainerConfig
+from src.entity.artifact_entity import DataIngestionArtifact,DataTransformationArtifact
+
 class TrainingPipeline:
     def __init__(self):
-        self.data_ingestion_obj=DataIngestion()
-        self.data_transformation_obj=DataTransformation()
-        self.model_trainer_obj=ModelTrainer()
+        self.data_ingestion_config=DataIngestionConfig()
+        self.data_transformation_config=DataTransformationConfig()
+        self.model_trainer_config=ModelTrainerConfig()
 
     def initiate_training_pipeline(self):
         try:
-            logging.info('Training Pipeline Started')   
-            train_file_path,test_file_Path=self.data_ingestion_obj.initiate_data_ingestion()
+            logging.info('Training Pipeline Started')  
 
-            x_train_resampled,y_train_resampled,x_test_arr,y_test_arr=self.data_transformation_obj.initiate_data_transformation(train_file_path,test_file_Path)
+            data_ingestion=DataIngestion(data_ingestion_config=self.data_ingestion_config)
+            data_ingestion_artifact=data_ingestion.initiate_data_ingestion()
 
-            accuracy=self.model_trainer_obj.initiate_model_trainer(x_train_resampled,y_train_resampled,x_test_arr,y_test_arr)
+            data_transformation=DataTransformation(data_ingestion_artifact=data_ingestion_artifact,data_transformation_config=self.data_transformation_config)
+            data_transformation_artifact=data_transformation.initiate_data_transformation()
 
-            return accuracy
+            model_trainer=ModelTrainer(model_trainer_config=self.model_trainer_config,data_transformation_artifact=data_transformation_artifact)
+            model_trainer_artifact=model_trainer.initiate_model_trainer()
+
+            logging.info('Training Pipeline Completed')
         
         except Exception as e:
             raise CustomException(e,sys)
@@ -30,5 +37,4 @@ class TrainingPipeline:
 
 if __name__=='__main__':
     obj=TrainingPipeline()
-    acc=obj.initiate_training_pipeline()
-    print(acc)
+    obj.initiate_training_pipeline()
