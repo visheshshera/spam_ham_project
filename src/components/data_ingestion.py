@@ -30,7 +30,7 @@ class DataIngestion:
 
             train_df,test_df=train_test_split(df,
                                               test_size=self.data_ingestion_config.train_test_split_ratio,
-                                              random_state=42,
+                                              random_state=self.data_ingestion_config.random_state,
                                               stratify=y)
 
             
