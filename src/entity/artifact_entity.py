@@ -8,6 +8,13 @@ class DataIngestionArtifact:
 
 
 @dataclass
+class DataValidationArtifact:
+    validation_status: bool
+    message: str
+    validation_report_file_path: str
+
+
+@dataclass
 class DataTransformationArtifact:
     x_train_resampled_path: str
     y_train_resampled_path: str

@@ -30,8 +30,18 @@ class DataIngestionConfig:
 
 
 @dataclass
+class DataValidationConfig:
+    data_validation_dir: str = os.path.join(
+        training_pipeline_config.artifact_dir, DATA_VALIDATION_DIR_NAME
+    )
+    validation_report_file_path: str = os.path.join(
+        data_validation_dir, DATA_VALIDATION_REPORT_FILE_NAME
+    )
+
+
+@dataclass
 class DataTransformationConfig:
-    # for nlp project concatenation is not ised to create train and test arr instead we used x_train_resampled,y_train_resampled,x_test_arr,y_test_arr
+    # for nlp project concatenation is not used to create train and test arr instead we used x_train_resampled,y_train_resampled,x_test_arr,y_test_arr
 
     data_transformation_dir: str = os.path.join(
         training_pipeline_config.artifact_dir, DATA_TRANSFORMATION_DIR_NAME

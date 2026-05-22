@@ -1,0 +1,13 @@
+columns:
+  - text_type : str
+  - text : str
+
+categorical_columns:
+  - text_type
+  - text
+  
+# numerical_columns:
+#   - sepal_length
+#   - sepal_width
+#   - petal_length
+#   - petal_width

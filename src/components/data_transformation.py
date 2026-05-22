@@ -1,7 +1,7 @@
 import os, sys
 
 from src.constants import *
-from src.utils.main_utils import save_object, save_numpy_array_data
+from src.utils.main_utils import *
 from src.utils.text_preprocessing import preprocess_text
 from src.exception import CustomException
 from src.logger import logging
@@ -10,7 +10,8 @@ from src.entity.config_entity import DataTransformationConfig
 from src.entity.artifact_entity import (
     DataTransformationArtifact,
     DataIngestionArtifact,
-)  # , DataValidationArtifact
+    DataValidationArtifact,
+)
 
 
 from scipy import sparse
@@ -30,20 +31,26 @@ class DataTransformation:
     def __init__(
         self,
         data_ingestion_artifact: DataIngestionArtifact,
+        data_validation_artifact: DataValidationArtifact,
         data_transformation_config: DataTransformationConfig,
     ):
-        # data_validation_artifact: DataValidationArtifact):
+
         try:
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_transformation_config = data_transformation_config
-            # self.data_validation_artifact = data_validation_artifact
-            # self._schema_config = read_yaml_file(file_path=SCHEMA_FILE_PATH)
+            self.data_validation_artifact = data_validation_artifact
+            self._schema_config = read_yaml_file(
+                file_path=os.path.join("config", "schema.yaml")
+            )
         except Exception as e:
             raise CustomException(e, sys)
 
     def initiate_data_transformation(self):
         try:
             logging.info("Data Transformation Started")
+
+            if not self.data_validation_artifact.validation_status:
+                raise Exception(self.data_validation_artifact.message)
 
             train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
             test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
@@ -86,7 +93,7 @@ class DataTransformation:
                         "tfidf",
                         TfidfVectorizer(
                             max_features=self.data_transformation_config.tf_idf_max_features,
-                            ngram_range=self.data_ingestion_artifact.n_gram_range,
+                            ngram_range=self.data_transformation_config.n_gram_range,
                         ),
                     )
                 ]
