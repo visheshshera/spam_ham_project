@@ -1,8 +1,8 @@
 import re
 import nltk
 
-nltk.download('stopwords')
-nltk.download('punkt_tab')
+nltk.download("stopwords")
+nltk.download("punkt_tab")
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -11,16 +11,16 @@ from nltk import pos_tag
 
 
 def get_wordnet_pos(tag):
-    if tag.startswith('J'):
-        return 'a'
-    elif tag.startswith('V'):
-        return 'v'
-    elif tag.startswith('N'):
-        return 'n'
-    elif tag.startswith('R'):
-        return 'r'
+    if tag.startswith("J"):
+        return "a"
+    elif tag.startswith("V"):
+        return "v"
+    elif tag.startswith("N"):
+        return "n"
+    elif tag.startswith("R"):
+        return "r"
     else:
-        return 'n'
+        return "n"
 
 
 def preprocess_text(text):
@@ -29,7 +29,9 @@ def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
 
     text = text.lower()
-    text = re.sub(r"^[^A-Za-z0-9₹$€£¥]+|[^A-Za-z0-9\s₹$€£¥]+|[\s]+$", "", text).strip()  #only keeping digits,alphabet,currency symbol
+    text = re.sub(
+        r"^[^A-Za-z0-9₹$€£¥]+|[^A-Za-z0-9\s₹$€£¥]+|[\s]+$", "", text
+    ).strip()  # only keeping digits,alphabet,currency symbol
 
     tokens = word_tokenize(text)
 
@@ -38,8 +40,7 @@ def preprocess_text(text):
     pos_tags = pos_tag(tokens)
 
     tokens = [
-        lemmatizer.lemmatize(word, get_wordnet_pos(pos))
-        for word, pos in pos_tags
+        lemmatizer.lemmatize(word, get_wordnet_pos(pos)) for word, pos in pos_tags
     ]
 
     return " ".join(tokens)

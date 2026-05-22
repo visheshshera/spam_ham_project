@@ -8,6 +8,7 @@ from src.logger import logging
 from src.constants import DATABASE_NAME, MONGODB_URL_KEY
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 ca = certifi.where()
@@ -36,7 +37,7 @@ class MongoDBClient:
                 MongoDBClient.client = pymongo.MongoClient(
                     mongo_db_url,
                     tlsCAFile=ca,
-                    serverSelectionTimeoutMS=5000  # fail fast if server unreachable
+                    serverSelectionTimeoutMS=5000,  # fail fast if server unreachable
                 )
 
                 # Force connection check

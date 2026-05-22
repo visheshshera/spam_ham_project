@@ -1,6 +1,6 @@
 # class to import data from mongodb and store it in a dataframe locally
 
-import os ,sys
+import os, sys
 from src.exception import CustomException
 from src.logger import logging
 from src.configuration.mongo_db_connection import MongoDBClient
@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from typing import Optional
+
 
 class DataPuller:
     def __init__(self) -> None:
@@ -21,7 +22,9 @@ class DataPuller:
         except Exception as e:
             raise CustomException(e, sys)
 
-    def import_collection_as_dataframe(self, collection_name: str,database_name: Optional[str] = None)-> pd.DataFrame:
+    def import_collection_as_dataframe(
+        self, collection_name: str, database_name: Optional[str] = None
+    ) -> pd.DataFrame:
         """
         Imports a collection from a MongoDB database as a pandas DataFrame.
 
@@ -78,9 +81,7 @@ class DataPuller:
             # Replace 'na' values
             df.replace({"na": np.nan}, inplace=True)
 
-            logging.info(
-                f"Data successfully imported. Shape of dataframe: {df.shape}"
-            )
+            logging.info(f"Data successfully imported. Shape of dataframe: {df.shape}")
 
             return df
 

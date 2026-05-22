@@ -27,15 +27,17 @@ Data transformation related constant start with DATA_TRANSFORMATION VAR NAME
 """
 
 DATA_TRANSFORMATION_ROS_RANDOM_STATE: int = 42
+TF_IDF_MAX_FEATURES: int = 5000
+N_GRAM_RANGE: tuple = (1, 2)
 DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"
 DATA_TRANSFORMATION_PREPROCESSED_OBJECT_FILE_NAME: str = "preprocessed.pkl"
 DATA_TRANSFORMATION_TARGET_ENCODER_OBJECT_FILE_NAME: str = "target_encoder.pkl"
 TFIDF_VECTORIZER_FILE_NAME: str = "tfidf_vectorizer.pkl"
-TARGET_ENCODER_FILE_NAME:str="target_encoder.pkl"
-X_TRAIN_RESAMPLED_FILE_NAME:str="x_train_resampled.npz"
-Y_TRAIN_RESAMPLED_FILE_NAME:str="y_train_resampled.npy"
-X_TEST_FILE_NAME:str="x_test.npz"
-Y_TEST_FILE_NAME:str="y_test.npy"
+TARGET_ENCODER_FILE_NAME: str = "target_encoder.pkl"
+X_TRAIN_RESAMPLED_FILE_NAME: str = "x_train_resampled.npz"
+Y_TRAIN_RESAMPLED_FILE_NAME: str = "y_train_resampled.npy"
+X_TEST_FILE_NAME: str = "x_test.npz"
+Y_TEST_FILE_NAME: str = "y_test.npy"
 
 
 """
@@ -43,4 +45,3 @@ Model trainer related constant start with MODEL_TRAINER VAR NAME
 """
 MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_FILE_NAME: str = "model.pkl"
-
