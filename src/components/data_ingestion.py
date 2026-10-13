@@ -26,10 +26,11 @@ class DataIngestion:
 
     def initiate_data_ingestion(self):
         try:
-            logging.info("Data Ingestion Started")
+            logging.info("Data Ingestion component initiated")
             df = DataPuller().import_collection_as_dataframe(
                 collection_name=self.data_ingestion_config.collection_name
             )
+            logging.info("Fetching data from MongoDB")
 
             x, y = df[["text"]], df["text_type"]
 
@@ -50,7 +51,7 @@ class DataIngestion:
 
             test_df.to_csv(self.data_ingestion_config.test_file_path, index=False)
 
-            logging.info("Data Ingestion Completed")
+            logging.info("Data Ingestion Artifact Created Successfully")
 
             data_ingestion_artifact = DataIngestionArtifact(
                 train_file_path=self.data_ingestion_config.train_file_path,
@@ -66,3 +67,4 @@ class DataIngestion:
 # if __name__ == "__main__":
 #     data_ingestion = DataIngestion()
 #     data_ingestion.initiate_data_ingestion()
+#     print("Data Ingestion Completed")

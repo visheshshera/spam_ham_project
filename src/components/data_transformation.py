@@ -55,6 +55,9 @@ class DataTransformation:
             train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
             test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
 
+            logging.info(train_df.shape)
+            logging.info(test_df.shape)
+
             train_df.dropna(inplace=True)
             test_df.dropna(inplace=True)
 
@@ -144,3 +147,9 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e, sys)
+
+
+# if "__name__" == "__main__":
+#     obj = DataTransformation()
+#     obj.initiate_data_transformation()
+#     print("Data Transformation Completed")
