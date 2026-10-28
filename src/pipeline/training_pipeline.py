@@ -1,6 +1,9 @@
 import os, sys
+import shutil
 from src.logger import logging
 from src.exception import CustomException
+from src.constants import MODEL_DIR, TFIDF_VECTORIZER_FILE_NAME, MODEL_FILE_NAME
+
 
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
@@ -17,6 +20,7 @@ from src.entity.artifact_entity import (
     DataIngestionArtifact,
     DataValidationArtifact,
     DataTransformationArtifact,
+    ModelTrainerArtifact,
 )
 
 
@@ -115,6 +119,30 @@ class TrainingPipeline:
         except Exception as e:
             raise CustomException(e, sys)
 
+    def publish_model(self):
+        """Copy vectorizer and model into models/ for prediction.
+        Copies to a temp folder first, then swaps, so models/ is never half-updated."""
+        try:
+            tmp_dir = MODEL_DIR + "_tmp"
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+            os.makedirs(tmp_dir)
+
+            shutil.copy(
+                self.data_transformation_config.tfidf_vectorizer_file_path,
+                os.path.join(tmp_dir, TFIDF_VECTORIZER_FILE_NAME),
+            )
+            shutil.copy(
+                self.model_trainer_config.model_file_path,
+                os.path.join(tmp_dir, MODEL_FILE_NAME),
+            )
+
+            shutil.rmtree(MODEL_DIR, ignore_errors=True)
+            os.rename(tmp_dir, MODEL_DIR)
+            logging.info(f"Model published to {MODEL_DIR}/")
+
+        except Exception as e:
+            raise CustomException(e, sys)
+
     def run_pipeline(self):
         try:
             logging.info("Training Pipeline Started")
@@ -134,6 +162,12 @@ class TrainingPipeline:
                 data_transformation_artifact=data_transformation_artifact
             )
 
+            model_trainer_artifact = self.start_model_trainer(
+                data_transformation_artifact=data_transformation_artifact
+            )
+
+            self.publish_model()
+
             logging.info("Training Pipeline Completed")
 
         except Exception as e:
@@ -143,3 +177,4 @@ class TrainingPipeline:
 if __name__ == "__main__":
     training_pipeline = TrainingPipeline()
     training_pipeline.run_pipeline()
+    print("Training Pipeline Completed")

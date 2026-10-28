@@ -53,3 +53,7 @@ Model trainer related constant start with MODEL_TRAINER VAR NAME
 """
 MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_FILE_NAME: str = "model.pkl"
+
+
+ARTIFACT_DIR: str = "artifact"
+MODEL_DIR: str = "models"

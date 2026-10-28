@@ -3,7 +3,7 @@ from src.constants import *
 from dataclasses import dataclass
 from datetime import datetime
 
-TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+TIMESTAMP: str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
 
 @dataclass
@@ -75,12 +75,5 @@ class ModelTrainerConfig:
 
 @dataclass
 class PredictionPipelineConfig:
-
-    model_file_path: str = os.path.join(
-        training_pipeline_config.artifact_dir, MODEL_TRAINER_DIR_NAME, MODEL_FILE_NAME
-    )
-    vectorizer_file_path: str = os.path.join(
-        training_pipeline_config.artifact_dir,
-        DATA_TRANSFORMATION_DIR_NAME,
-        TFIDF_VECTORIZER_FILE_NAME,
-    )
+    vectorizer_file_path: str = os.path.join(MODEL_DIR, TFIDF_VECTORIZER_FILE_NAME)
+    model_file_path: str = os.path.join(MODEL_DIR, MODEL_FILE_NAME)
