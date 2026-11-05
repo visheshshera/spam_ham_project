@@ -10,3 +10,5 @@ fsspec
 huggingface_hub
 dill
 streamlit
+fastapi
+uvicorn

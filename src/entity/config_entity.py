@@ -1,6 +1,6 @@
 import os
 from src.constants import *
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 TIMESTAMP: str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -21,9 +21,15 @@ class DataIngestionConfig:
     data_ingestion_dir: str = os.path.join(
         training_pipeline_config.artifact_dir, DATA_INGESTION_DIR_NAME
     )
-    raw_file_path: str = os.path.join(data_ingestion_dir, RAW_FILE_NAME)
-    train_file_path: str = os.path.join(data_ingestion_dir, TRAIN_FILE_NAME)
-    test_file_path: str = os.path.join(data_ingestion_dir, TEST_FILE_NAME)
+    feature_store_file_path: str = os.path.join(
+        data_ingestion_dir, DATA_INGESTION_FEATURE_STORE_DIR, RAW_FILE_NAME
+    )
+    train_file_path: str = os.path.join(
+        data_ingestion_dir, DATA_INGESTION_INGESTED_DIR, TRAIN_FILE_NAME
+    )
+    test_file_path: str = os.path.join(
+        data_ingestion_dir, DATA_INGESTION_INGESTED_DIR, TEST_FILE_NAME
+    )
     train_test_split_ratio: float = DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
     collection_name: str = DATA_INGESTION_COLLECTION_NAME
     random_state: int = DATA_INGESTION_RANDOM_STATE
@@ -71,6 +77,26 @@ class ModelTrainerConfig:
         training_pipeline_config.artifact_dir, MODEL_TRAINER_DIR_NAME
     )
     model_file_path: str = os.path.join(model_trainer_dir, MODEL_FILE_NAME)
+
+
+@dataclass
+class ModelEvaluationConfig:
+    changed_threshold_score: float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+
+
+@dataclass
+class ModelPusherConfig:
+    model_dir: str = MODEL_DIR
+    model_file_path: str = field(init=False)
+    vectorizer_file_path: str = field(init=False)
+    metadata_file_path: str = field(init=False)
+
+    def __post_init__(self):
+        self.model_file_path = os.path.join(self.model_dir, MODEL_FILE_NAME)
+        self.vectorizer_file_path = os.path.join(
+            self.model_dir, TFIDF_VECTORIZER_FILE_NAME
+        )
+        self.metadata_file_path = os.path.join(self.model_dir, "metadata.json")
 
 
 @dataclass

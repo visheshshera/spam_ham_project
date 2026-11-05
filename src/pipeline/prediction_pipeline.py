@@ -1,5 +1,4 @@
 import os, sys
-from src.constants import *
 from src.exception import CustomException
 from src.logger import logging
 import joblib
@@ -34,16 +33,12 @@ class PredictionPipeline:
             preprocessed_input = self.vectorizer.transform([text])
             prediction = self.model.predict(preprocessed_input)
 
-            return int(prediction[0])
+            return "spam" if int(prediction[0]) == 1 else "ham"
 
         except Exception as e:
-            raise CustomException(e, sys)
+            raise CustomException(e, sys) from e
 
 
-if __name__ == "__main__":
-    obj = PredictionPipeline()
-    res = obj.initiate_prediction_pipeline("winning $2000")
-    if res == 0:
-        print("ham")
-    else:
-        print("spam")
+# if __name__ == "__main__":
+#     obj = PredictionPipeline()
+#     print(obj.initiate_prediction_pipeline("winning $2000"))

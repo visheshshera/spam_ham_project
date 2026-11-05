@@ -141,6 +141,8 @@ class DataTransformation:
                 y_train_resampled_path=self.data_transformation_config.y_train_resampled_file_path,
                 x_test_path=self.data_transformation_config.x_test_file_path,
                 y_test_path=self.data_transformation_config.y_test_file_path,
+                tfidf_vectorizer_file_path=self.data_transformation_config.tfidf_vectorizer_file_path,
+                target_encoder_file_path=self.data_transformation_config.target_encoder_file_path,
             )
 
             return data_transformation_artifact

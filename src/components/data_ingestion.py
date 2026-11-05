@@ -32,7 +32,8 @@ class DataIngestion:
             )
             logging.info("Fetching data from MongoDB")
 
-            x, y = df[["text"]], df["text_type"]
+            df = df.dropna().drop_duplicates()
+            y = df["text_type"]
 
             train_df, test_df = train_test_split(
                 df,
@@ -42,10 +43,16 @@ class DataIngestion:
             )
 
             os.makedirs(
-                os.path.dirname(self.data_ingestion_config.raw_file_path), exist_ok=True
+                os.path.dirname(self.data_ingestion_config.feature_store_file_path),
+                exist_ok=True,
             )
 
-            df.to_csv(self.data_ingestion_config.raw_file_path, index=False)
+            df.to_csv(self.data_ingestion_config.feature_store_file_path, index=False)
+
+            os.makedirs(
+                os.path.dirname(self.data_ingestion_config.train_file_path),
+                exist_ok=True,
+            )
 
             train_df.to_csv(self.data_ingestion_config.train_file_path, index=False)
 
@@ -64,7 +71,7 @@ class DataIngestion:
             raise CustomException(e, sys)
 
 
-if __name__ == "__main__":
-    data_ingestion = DataIngestion()
-    data_ingestion.initiate_data_ingestion()
-    print("Data Ingestion Completed")
+# if __name__ == "__main__":
+#     data_ingestion = DataIngestion()
+#     data_ingestion.initiate_data_ingestion()
+#     print("Data Ingestion Completed")
